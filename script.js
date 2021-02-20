@@ -11,7 +11,6 @@ const playerFactory = (name, mark, moves) => {
 
 // Board module
 const gameBoard = (() => {
-    
     const cells = Array.from(document.querySelectorAll('.cell'));
     let winner = null;
     let turns = 0;
@@ -36,20 +35,18 @@ const gameBoard = (() => {
     const isGameOver = (player1, player2) => {
         xMoves = player1.moves;
         yMoves = player2.moves;
-        for (i = 0; i < winConditions.length; i++) {
 
+        for (i = 0; i < winConditions.length; i++) {
             if (gameBoard.winConditions[i].every(val => xMoves.includes(val))) {
                 winner = 'p1';
                 return winner;
-
             }
             else if (gameBoard.winConditions[i].every(val => yMoves.includes(val))) {
                 winner = 'p2';
                 return winner;
             }
-
-
         }
+
     }
 
     // draws the board
@@ -92,56 +89,74 @@ const gameController = (() => {
 
 
     const winGame = (player) => {
-        if (player === 'p1') {
-            winnerTitle.textContent = 'Player 1 Wins!';
-        } else if (player === 'p2') {
-            winnerTitle.textContent = 'Player 2 Wins!';
-        } else {
-            winnerTitle.textContent = 'Tie!';
-        }
-
         turnContainer.textContent = '';
         restartButton.textContent = 'Play Again';
-        return false;
+
+        if (player === 'p1') {
+            winnerTitle.textContent = 'Player 1 Wins!';
+            return;
+        } else if (player === 'p2') {
+            winnerTitle.textContent = 'Player 2 Wins!';
+            return;
+        } else {
+            winnerTitle.textContent = 'It\'s a Tie!';
+            return;
+        }
     }
 
     // Play game
     gameBoard.cells.forEach(cell => {
-        cell.addEventListener('click', function (e) {
-            if (gameBoard.isGameOver(player1, player2) === undefined && gameBoard.turns < 8) {
+        cell.addEventListener('mousedown', function (e) {
+            gameBoard.turns++;
+            if (gameBoard.isGameOver(player1, player2) === undefined && gameBoard.turns < 9) {
                 if (player1turn) {
                     if (gameBoard.boardArray[e.target.id] === '') {
                         player1.playTurn(e.target.id);
                         player1.moves.push(Number(e.target.id));
-                        gameBoard.turns++;
-                        console.log(gameBoard.turns)
                         toggleTurn();
+
                         if (gameBoard.isGameOver(player1, player2) === 'p1') {
                             winGame('p1');
-                            
+                            return;
                         }
                     }
                 } else if (!player1turn) {
                     if (gameBoard.boardArray[e.target.id] === '') {
                         player2.playTurn(e.target.id);
                         player2.moves.push(Number(e.target.id));
-                        gameBoard.turns++;
-                        console.log(gameBoard.turns)
                         toggleTurn();
+
                         if (gameBoard.isGameOver(player1, player2) === 'p2') {
                             winGame('p2');
-                            
+                            return;
                         }
                     }
                 }
-            } else {
-
-                winGame('tie');
-                
+            } else if (gameBoard.turns === 9) {
+                if (player1turn) {
+                    player1.playTurn(e.target.id);
+                    player1.moves.push(Number(e.target.id));
+                    if (gameBoard.isGameOver(player1, player2) === 'p1') {
+                        winGame('p1');
+                        return;
+                    } else if (gameBoard.isGameOver(player1, player2) === undefined) {
+                        winGame('tie');
+                    }
+                } else if (!player1turn) {
+                    player2.playTurn(e.target.id);
+                    player2.moves.push(Number(e.target.id));
+                    if (gameBoard.isGameOver(player1, player2) === 'p2') {
+                        winGame('p2');
+                        return;
+                    } else if (gameBoard.isGameOver(player1, player2) === undefined) {
+                        winGame('tie');
+                    }
+                }
             }
+
         })
     })
 
-    return {  }
+    return {}
 })();
 

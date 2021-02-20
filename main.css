@@ -1,7 +1,8 @@
 html {
     font-family: 'Press Start 2P', cursive;
     text-align: center;
-    background-color: linen;
+    background-color: midnightblue;
+    color: orangered;
 }
 
 header {
@@ -12,11 +13,14 @@ button {
     font-family: inherit;
     margin: 50px;
     padding: 20px;
+    background-color: orangered;
+    color: white;
 }
 
 button:hover {
     cursor: pointer;
-    background-color: lightcoral;
+    background-color: white;
+    color: orangered;
 }
 
 .gameboard-container {
@@ -35,7 +39,23 @@ button:hover {
 }
 
 .cell:hover {
-    background-color: greenyellow;
+    background-color: white;
     cursor: pointer;
 }
 
+
+ .top-row {
+     border-top: none;
+ }
+
+ .bot-row {
+     border-bottom: none;
+ }
+
+ .left-col {
+     border-left: none;
+ }
+
+ .right-col {
+     border-right: none;
+ }
