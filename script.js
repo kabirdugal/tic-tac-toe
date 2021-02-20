@@ -71,13 +71,13 @@ const gameController = (() => {
 
     // Turn
     let player1turn = true;
-    turnContainer.textContent = 'Player 1\'s Turn'
+    turnContainer.textContent = 'Player X\'s Turn'
 
     const toggleTurn = () => {
         if (player1turn) {
-            turnContainer.textContent = 'Player 2\'s Turn'
+            turnContainer.textContent = 'Player O\'s Turn'
         } else {
-            turnContainer.textContent = 'Player 1\'s Turn'
+            turnContainer.textContent = 'Player X\'s Turn'
         }
         player1turn = !player1turn;
     }
@@ -93,10 +93,10 @@ const gameController = (() => {
         restartButton.textContent = 'Play Again';
 
         if (player === 'p1') {
-            winnerTitle.textContent = 'Player 1 Wins!';
+            winnerTitle.textContent = 'Player X Wins!';
             return;
         } else if (player === 'p2') {
-            winnerTitle.textContent = 'Player 2 Wins!';
+            winnerTitle.textContent = 'Player O Wins!';
             return;
         } else {
             winnerTitle.textContent = 'It\'s a Tie!';
@@ -107,7 +107,10 @@ const gameController = (() => {
     // Play game
     gameBoard.cells.forEach(cell => {
         cell.addEventListener('mousedown', function (e) {
-            gameBoard.turns++;
+            if (gameBoard.boardArray[e.target.id] === '') { 
+                gameBoard.turns++; 
+            }
+            
             if (gameBoard.isGameOver(player1, player2) === undefined && gameBoard.turns < 9) {
                 if (player1turn) {
                     if (gameBoard.boardArray[e.target.id] === '') {
@@ -117,10 +120,9 @@ const gameController = (() => {
 
                         if (gameBoard.isGameOver(player1, player2) === 'p1') {
                             winGame('p1');
-                            return;
                         }
                     }
-                } else if (!player1turn) {
+                } else {
                     if (gameBoard.boardArray[e.target.id] === '') {
                         player2.playTurn(e.target.id);
                         player2.moves.push(Number(e.target.id));
@@ -128,7 +130,6 @@ const gameController = (() => {
 
                         if (gameBoard.isGameOver(player1, player2) === 'p2') {
                             winGame('p2');
-                            return;
                         }
                     }
                 }
@@ -138,16 +139,14 @@ const gameController = (() => {
                     player1.moves.push(Number(e.target.id));
                     if (gameBoard.isGameOver(player1, player2) === 'p1') {
                         winGame('p1');
-                        return;
                     } else if (gameBoard.isGameOver(player1, player2) === undefined) {
                         winGame('tie');
                     }
-                } else if (!player1turn) {
+                } else {
                     player2.playTurn(e.target.id);
                     player2.moves.push(Number(e.target.id));
                     if (gameBoard.isGameOver(player1, player2) === 'p2') {
                         winGame('p2');
-                        return;
                     } else if (gameBoard.isGameOver(player1, player2) === undefined) {
                         winGame('tie');
                     }
